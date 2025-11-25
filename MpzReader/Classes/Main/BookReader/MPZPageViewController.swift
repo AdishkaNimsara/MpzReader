@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import R2Shared
+import ScreenShield
 class MPZPageViewController : UIPageViewController {
     
     static func create(withHightlights highlights : [Highlight], highlightDelegate : HighlightListDelegate, publication : Publication, contentDelegate : MpzContentsDelegate) -> MPZPageViewController {
@@ -33,6 +34,7 @@ class MPZPageViewController : UIPageViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        applyScreenshotProtection()
         segmentedControl = UISegmentedControl(items: ["Contents", "Highlights"])
         segmentedControl.addTarget(self, action: #selector(MPZPageViewController.didSwitchMenu(_:)), for: UIControl.Event.valueChanged)
         segmentedControl.selectedSegmentIndex = index
