@@ -7,8 +7,9 @@
 
 import SwiftyJSON
 import SQLite
-import R2Shared
-import R2Navigator
+import ReadiumShared
+import ReadiumNavigator
+import Foundation
 
 public class Highlight {
     
@@ -33,10 +34,26 @@ public class Highlight {
             guard let loc = newValue else {
                 return
             }
-            self.resourceHref = loc.href
-            self.resourceType = loc.type
-            self.locations = loc.locations.jsonString ?? ""
-            self.locatorText = loc.text.jsonString ?? ""
+            // Fix: AnyURL to String
+            self.resourceHref = loc.href.string
+            // Fix: mediaType to String
+            self.resourceType = loc.mediaType.string
+            
+            // Fix: Serialize Locations using Readium's JSON property
+            if let data = try? JSONSerialization.data(withJSONObject: loc.locations.json) {
+                self.locations = String(data: data, encoding: .utf8) ?? ""
+            } else {
+                self.locations = "{}"
+            }
+            
+            // Fix: Serialize Text using Readium's JSON property
+            // loc.text is non-optional in Readium 3.x
+            if let data = try? JSONSerialization.data(withJSONObject: loc.text.json) {
+                self.locatorText = String(data: data, encoding: .utf8) ?? ""
+            } else {
+                self.locatorText = "{}"
+            }
+            
             self.resourceTitle = loc.title ?? ""
         }
         
@@ -46,28 +63,56 @@ public class Highlight {
                 self.locations == nil || self.locatorText ==  nil {
                 return nil
             }
-            return Locator.init(href: self.resourceHref,
-                                type: self.resourceType,
-                                title: self.resourceTitle,
-                                locations: Locations.init(jsonString: self.locations),
-                                text: LocatorText.init(jsonString: self.locatorText))
+            
+            // Fix: Deserialize Locations
+            let locationsObj: Locator.Locations
+            // Try explicit JSON decoding using Readium's JSON init
+            if let data = self.locations.data(using: .utf8),
+               let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+               let obj = try? Locator.Locations(json: json) {
+                locationsObj = obj
+            } else {
+                locationsObj = Locator.Locations()
+            }
+            
+            // Fix: Deserialize Text
+            let textObj: Locator.Text
+            if let data = self.locatorText.data(using: .utf8),
+               let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+               let obj = try? Locator.Text(json: json) {
+                textObj = obj
+            } else {
+                textObj = Locator.Text()
+            }
+            
+            // Fix: Create AnyURL and MediaType
+            guard let hrefUrl = AnyURL(string: self.resourceHref) else { return nil }
+            let mType = MediaType(self.resourceType) ?? .html
+            
+            return Locator(
+                href: hrefUrl,
+                mediaType: mType,
+                title: self.resourceTitle,
+                locations: locationsObj,
+                text: textObj
+            )
         }
     }
     
     static let TABLE = Table("highlight")
-    static let tbl_id = Expression<String>("id")
-    static let tbl_book = Expression<String>("book")
-    static let tbl_hightlightedText = Expression<String?>("hightlightedText")
-    static let tbl_createdAt = Expression<String>("createdAt")
-    static let tbl_range = Expression<String?>("range")
-    static let tbl_color = Expression<String?>("color")
+    static let tbl_id = Expression<String>(value: "id")
+    static let tbl_book = Expression<String>(value: "book")
+    static let tbl_hightlightedText = Expression<String?>(value: "hightlightedText")
+    static let tbl_createdAt = Expression<String>(value: "createdAt")
+    static let tbl_range = Expression<String?>(value: "range")
+    static let tbl_color = Expression<String?>(value: "color")
 
 
-    static let tbl_recource_href = Expression<String>("resourceHref")
-    static let tbl_recource_type = Expression<String>("resourceType")
-    static let tbl_recource_title = Expression<String>("resourceTitle")
-    static let tbl_locations = Expression<String>("locations")
-    static let tbl_locator_text = Expression<String>("locatorText")
+    static let tbl_recource_href = Expression<String>(value: "resourceHref")
+    static let tbl_recource_type = Expression<String>(value: "resourceType")
+    static let tbl_recource_title = Expression<String>(value: "resourceTitle")
+    static let tbl_locations = Expression<String>(value: "locations")
+    static let tbl_locator_text = Expression<String>(value: "locatorText")
     
     init() {
         
@@ -92,10 +137,10 @@ extension Highlight {
         let insert = Highlight.TABLE.insert(
             Highlight.tbl_id <- self.id,
             Highlight.tbl_book <- self.book,
-            Highlight.tbl_hightlightedText <- self.hightlightedText,
+            Highlight.tbl_hightlightedText <- self.hightlightedText ?? "",
             Highlight.tbl_createdAt <- self.createdAt,
-            Highlight.tbl_range <- self.range,
-            Highlight.tbl_color <- self.color,
+            Highlight.tbl_range <- self.range ?? "",
+            Highlight.tbl_color <- self.color ?? "",
             Highlight.tbl_recource_href <- self.resourceHref,
             Highlight.tbl_recource_type <- self.resourceType,
             Highlight.tbl_recource_title <- self.resourceTitle,
@@ -112,7 +157,7 @@ extension Highlight {
     func update() {
         let row = Highlight.TABLE.filter(Highlight.tbl_id == self.id)
         let update = row.update(
-            Highlight.tbl_color <- self.color
+            Highlight.tbl_color <- self.color ?? ""
         )
         guard let connection = MPZDBService.connection else {
             return

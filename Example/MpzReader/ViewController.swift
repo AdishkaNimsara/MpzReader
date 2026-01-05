@@ -49,9 +49,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
        MpzReader.configs.lightColors.primary = UIColor.orange
        MpzReader.configs.isEnableManualBookmarking = true
-        MpzReader.configs.isHighlightsEnabled = true
-        let mpzreader = MpzReader.init(withBook: list[indexPath.item])
-        mpzreader.present(inViewController: self)
+       MpzReader.configs.isHighlightsEnabled = true
+        
+       let mpzreader = MpzReader.init(withBook: list[indexPath.item])
+        
+       mpzreader.present(inViewController: self)
     }
 }
 

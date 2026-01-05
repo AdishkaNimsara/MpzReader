@@ -7,8 +7,8 @@
 
 import Foundation
 import UIKit
-import R2Shared
-import R2Navigator
+import ReadiumShared
+import ReadiumNavigator
 
 protocol MpzContentsDelegate {
     func contentRequest(navigateTo locator : Locator)
@@ -29,10 +29,25 @@ class MpzContentsVC : UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.links = flatten(publication.tableOfContents)
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.tableFooterView = UIView()
+
+        // Load table of contents asynchronously as it now returns a ReadResult<[Link]>
+        Task { [weak self] in
+            guard let self = self else { return }
+            let result = await self.publication.tableOfContents()
+            switch result {
+            case .success(let links):
+                self.links = self.flatten(links)
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            case .failure:
+                // If reading TOC fails, keep links empty or handle error as needed
+                break
+            }
+        }
     }
     
     func flatten(_ links: [Link], level: Int = 0) -> [(level: Int, link: Link)] {
@@ -55,10 +70,19 @@ extension MpzContentsVC : UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let link = self.links[indexPath.item]
-        let locator = Locator.init(link: link.link)
-        self.delegate?.contentRequest(navigateTo: locator)
-        self.navigationController?.popViewController(animated: true)
+        let item = self.links[indexPath.item]
+        Task { [weak self] in
+            guard let self = self else { return }
+            let result = await self.publication.locate(item.link)
+            if let locator = result {
+                DispatchQueue.main.async {
+                    self.delegate?.contentRequest(navigateTo: locator)
+                    self.navigationController?.popViewController(animated: true)
+                }
+            } else {
+                // Optionally handle the error (e.g., show an alert). For now, do nothing.
+            }
+        }
     }
     
     

@@ -6,40 +6,94 @@
 //
 import UIKit
 import Foundation
-import R2Streamer
-import R2Shared
-import R2Navigator
+import ReadiumStreamer
+import ReadiumShared
+import ReadiumNavigator
 import SQLite
 import ZIPFoundation
 public class MpzReader {
     
     public static var configs = MpzConfig()
     public var book : MpzBook!
-    public var pubBox : PubBox?
-    public var server = PublicationServer()
-    public var extracToPath : URL!
+    public var publication: Publication?
+    public var assetRetriever: AssetRetriever!
+    public var publicationOpener: PublicationOpener!
+    public var extractToPath: URL?
     
     public init(withBook book : MpzBook) {
         self.book = book
         self.initializeDatabase()
-        R2EnableLog(withMinimumSeverityLevel: .debug)
     }
     
-    public func present(inViewController vc : UIViewController) {
-        let view = self.createBookView()
-        if pubBox?.associatedContainer == nil || pubBox?.publication == nil {
-            MpzReader.configs.onError?()
-            MpzReader.configs.onDismiss?()
-            return
+    public func present(inViewController viewController: UIViewController) {
+        // Since opening a publication is async, we need to handle it properly
+        Task {
+            do {
+                try await self.openPublication()
+                
+                await MainActor.run {
+                    if self.publication == nil {
+                        MpzReader.configs.onError?()
+                        MpzReader.configs.onDismiss?()
+                        return
+                    }
+                    
+                    let navigationController = self.createBookView()
+                    viewController.present(navigationController, animated: true, completion: nil)
+                }
+            } catch {
+                print("Error opening publication: \(error)")
+                await MainActor.run {
+                    MpzReader.configs.onError?()
+                }
+            }
         }
-        vc.present(view, animated: true, completion: nil)
+    }
+    
+    private func openPublication() async throws {
+        // Initialize Readium components
+        let httpClient = DefaultHTTPClient()
+        self.assetRetriever = AssetRetriever(httpClient: httpClient)
+        
+        self.publicationOpener = PublicationOpener(
+            parser: DefaultPublicationParser(
+                httpClient: httpClient,
+                assetRetriever: self.assetRetriever,
+                pdfFactory: DefaultPDFDocumentFactory()
+            )
+        )
+        
+        // Convert URL to FileURL
+        guard let fileUrl = FileURL(string: self.book.epubPath.absoluteString) else {
+            throw NSError(domain: "Invalid EPUB path", code: -1)
+        }
+        
+        // Retrieve asset
+        let assetResult = await self.assetRetriever.retrieve(url: fileUrl)
+        guard case .success(let asset) = assetResult else {
+            throw NSError(domain: "Failed to retrieve asset", code: -1)
+        }
+        
+        // Open publication
+        let openResult = await self.publicationOpener.open(
+            asset: asset,
+            allowUserInteraction: false
+        )
+        
+        switch openResult {
+        case .success(let publication):
+            self.publication = publication
+            print("EPUB opened successfully at \(self.book.epubPath)")
+            
+            // Extract if needed (optional - you may not need this with GCDWebServer adapter)
+            self.extractEpubIfNeeded()
+            
+        case .failure(let error):
+            throw error
+        }
     }
     
     private func createBookView() -> UINavigationController {
-        self.parseBook()
-        self.extractEpub()
-        
-        
         let stry = UIStoryboard.init(name: "Main", bundle: Bundle.init(for: type(of: self)))
         let vc = stry.instantiateViewController(withIdentifier: "reader") as! MpzBookVC
         vc.reader = self
@@ -49,32 +103,36 @@ public class MpzReader {
         return navController
     }
     
-    private func extractEpub() {
-        guard let (_, container) = pubBox else {
-            print("pubbox nil, cant extract")
+    // MARK: - EPUB Extraction (if needed for legacy reasons)
+    
+    /// Extracts the EPUB file to a temporary directory
+    /// Note: In Readium 3.x, this is usually NOT needed as the GCDWebServer adapter
+    /// can serve content directly from the archive. Only use if you have a specific need.
+    private func extractEpubIfNeeded() {
+        // If you don't actually need extraction, you can remove this method entirely
+        // The GCDWebServer adapter handles serving from archives automatically
+        
+        guard FileManager.default.fileExists(atPath: self.book.epubPath.path) else {
+            print("EPUB file not found at path")
             return
         }
+        
         do {
-            var tmpFolder = URL.init(fileURLWithPath: NSTemporaryDirectory())
-            tmpFolder = tmpFolder.appendingPathComponent(UUID.init().uuidString)
+            var tmpFolder = URL(fileURLWithPath: NSTemporaryDirectory())
+            tmpFolder = tmpFolder.appendingPathComponent(UUID().uuidString)
             try FileManager.default.createDirectory(at: tmpFolder, withIntermediateDirectories: true, attributes: nil)
-            self.extracToPath = tmpFolder
-            print("book temp extract path \(self.extracToPath)")
-            let rootFile = URL.init(fileURLWithPath: container.rootFile.rootPath)
+            
+            self.extractToPath = tmpFolder
+            print("Extracting EPUB to: \(tmpFolder)")
+            
+            // Extract using ZIPFoundation directly from the EPUB file
             let fileManager = FileManager()
-            try fileManager.unzipItem(at: rootFile, to: self.extracToPath)
+            try fileManager.unzipItem(at: self.book.epubPath, to: tmpFolder)
+            
+            print("EPUB extracted successfully")
         } catch {
-            print("error while adding epub to the server", error.localizedDescription)
-        }
-    }
-    private func parseBook() {
-        do {
-            let (pubBox, _) = try EpubParser.parse(at: self.book.epubPath)
-            let (publication, container) = pubBox
-            print("epub parsed at", book.epubPath as Any, book.epubExtractPath as Any)
-            self.pubBox = (publication, container)
-        } catch {
-            print("error while parsing epub", book.epubPath as Any, error.localizedDescription as Any)
+            print("Error extracting EPUB: \(error.localizedDescription)")
+            // Don't fail - extraction is optional with Readium 3.x
         }
     }
     
@@ -100,14 +158,19 @@ public class MpzReader {
         Highlight.fetch(ForBook: book.id)
     }
     
-    func getColors(forAppearance appearance : UserProperty?) -> MpzColors {
-        guard let app = appearance else {
+    /// Get colors based on EPUB theme/appearance
+    /// In Readium 3.x, we use EPUBPreferences theme instead of deprecated UserProperty
+    func getColors(forTheme theme: Theme?) -> MpzColors {
+        guard let theme = theme else {
             return MpzColors()
         }
-        switch app.toString() {
-        case  "readium-night-on":
+        
+        switch theme {
+        case .dark:
             return MpzReader.configs.darkColors
-        default:
+        case .light, .sepia:
+            return MpzReader.configs.lightColors
+        @unknown default:
             return MpzReader.configs.lightColors
         }
     }

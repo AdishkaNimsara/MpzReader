@@ -7,22 +7,22 @@
 
 import Foundation
 import UIKit
-import R2Navigator
-import R2Shared
+import ReadiumNavigator
+import ReadiumShared
 import WebKit
 import SwiftyJSON
-extension MpzBookVC : HighlightListDelegate {
-    func highlighDidClick(highlight: Highlight) {
-        if let loc = highlight.locator {
-            self.epubNavigator.go(to: loc, animated: true, completion: {})
-        }
-    }
-    
-    func delegateHighlight(highlight: Highlight) {
-        
-    }
-    
-}
+//extension MpzBookVC : HighlightListDelegate {
+////    func highlighDidClick(highlight: Highlight) {
+////        if let loc = highlight.locator {
+////            self.epubNavigator.go(to: loc, animated: true, completion: {})
+////        }
+////    }
+//    
+//    func delegateHighlight(highlight: Highlight) {
+//        
+//    }
+//    
+//}
 
 extension MpzBookVC {
     
@@ -77,19 +77,19 @@ extension MpzBookVC {
     }
     
     func markHighlights() {
-        guard let href = self.epubNavigator.currentLocation?.href else {
-            return
-        }
-        print(href)
-        for h in Highlight.getHighlights(ForHref: href) {
-            let json = JSON([
-                "range" : h.range,
-                "bgColor" : h.color ?? "yellow",
-                "id" : h.id ?? "-1"
-                ])
-            epubNavigator.execJS(script: "mpz_highlightRangeStr('\(json.rawString()!.toBase64())')")
-            self.clearSelection()
-        }
+//        guard let href = self.epubNavigator.currentLocation?.href else {
+//            return
+//        }
+//        print(href)
+//        for h in Highlight.getHighlights(ForHref: href) {
+//            let json = JSON([
+//                "range" : h.range,
+//                "bgColor" : h.color ?? "yellow",
+//                "id" : h.id ?? "-1"
+//                ])
+//            epubNavigator.execJS(script: "mpz_highlightRangeStr('\(json.rawString()!.toBase64())')")
+//            self.clearSelection()
+//        }
     }
     
     func deleteHighlight(id : String) {

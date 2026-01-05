@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import R2Shared
+import ReadiumShared
 public class MpzColors {
     public var primary : UIColor = UIColor(red:0.25, green:0.32, blue:0.71, alpha:1.0)
     public var secondary : UIColor = UIColor(red:0.19, green:0.25, blue:0.62, alpha:1.0)

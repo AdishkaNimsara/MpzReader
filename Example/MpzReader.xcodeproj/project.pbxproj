@@ -7,19 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		24F5E81BEB0AEC45A5E1C433 /* Pods_MpzReader_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A6A426D492CF1F926CADEC35 /* Pods_MpzReader_Example.framework */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
-		61BF55DC507488941831312E /* Pods_MpzReader_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5F20B57DCC8D68114F04D4F /* Pods_MpzReader_Tests.framework */; };
-		71F212506151D53B97B128E5 /* Pods_MpzReader_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E123D20241EB9F04F3C5908C /* Pods_MpzReader_Example.framework */; };
 		741C029924FCF67500514D67 /* 3.epub in Resources */ = {isa = PBXBuildFile; fileRef = 741C029624FCF67500514D67 /* 3.epub */; };
 		741C029A24FCF67500514D67 /* 4.epub in Resources */ = {isa = PBXBuildFile; fileRef = 741C029724FCF67500514D67 /* 4.epub */; };
 		741C029B24FCF67500514D67 /* 5.epub in Resources */ = {isa = PBXBuildFile; fileRef = 741C029824FCF67500514D67 /* 5.epub */; };
 		74F60BBE24F7BA350012A339 /* 2.epub in Resources */ = {isa = PBXBuildFile; fileRef = 74F60BBD24F7BA350012A339 /* 2.epub */; };
 		74F60BC024F7BA3B0012A339 /* 1.epub in Resources */ = {isa = PBXBuildFile; fileRef = 74F60BBF24F7BA3B0012A339 /* 1.epub */; };
+		7F551239B99DB180BF52EBAD /* Pods_MpzReader_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 190FB64603FADCD1B990882C /* Pods_MpzReader_Tests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,11 +33,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		08790FD4F67A58AB9D6E272B /* Pods-MpzReader_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MpzReader_Tests.debug.xcconfig"; path = "Target Support Files/Pods-MpzReader_Tests/Pods-MpzReader_Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		0B28402F54671F4DC56F5463 /* Pods-MpzReader_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MpzReader_Tests.release.xcconfig"; path = "Target Support Files/Pods-MpzReader_Tests/Pods-MpzReader_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		0157108341BF83894805E4A0 /* Pods-MpzReader_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MpzReader_Tests.release.xcconfig"; path = "Target Support Files/Pods-MpzReader_Tests/Pods-MpzReader_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		1333010A072B23C80AAB70F6 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		189B7B650264F316A2353A13 /* Pods-MpzReader_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MpzReader_Example.release.xcconfig"; path = "Target Support Files/Pods-MpzReader_Example/Pods-MpzReader_Example.release.xcconfig"; sourceTree = "<group>"; };
+		190FB64603FADCD1B990882C /* Pods_MpzReader_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MpzReader_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B7B0288C8CFAF3DC5CECD24 /* MpzReader.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = MpzReader.podspec; path = ../MpzReader.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		508D18314468310EFE6EAB74 /* Pods-MpzReader_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MpzReader_Example.debug.xcconfig"; path = "Target Support Files/Pods-MpzReader_Example/Pods-MpzReader_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* MpzReader_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MpzReader_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -54,9 +54,9 @@
 		74F60BBD24F7BA350012A339 /* 2.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = 2.epub; sourceTree = "<group>"; };
 		74F60BBF24F7BA3B0012A339 /* 1.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = 1.epub; sourceTree = "<group>"; };
 		8AB11BC6B1ECC906594C844B /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
-		C5F20B57DCC8D68114F04D4F /* Pods_MpzReader_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MpzReader_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E123D20241EB9F04F3C5908C /* Pods_MpzReader_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MpzReader_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		FC0C9F9FB3B1206D47642C28 /* Pods-MpzReader_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MpzReader_Example.release.xcconfig"; path = "Target Support Files/Pods-MpzReader_Example/Pods-MpzReader_Example.release.xcconfig"; sourceTree = "<group>"; };
+		A6A426D492CF1F926CADEC35 /* Pods_MpzReader_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MpzReader_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		ED72DD4B46F7ADFC29A8D4CC /* Pods-MpzReader_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MpzReader_Tests.debug.xcconfig"; path = "Target Support Files/Pods-MpzReader_Tests/Pods-MpzReader_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		F2659AFC032ADF7623EF2136 /* Pods-MpzReader_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MpzReader_Example.debug.xcconfig"; path = "Target Support Files/Pods-MpzReader_Example/Pods-MpzReader_Example.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,7 +64,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				71F212506151D53B97B128E5 /* Pods_MpzReader_Example.framework in Frameworks */,
+				24F5E81BEB0AEC45A5E1C433 /* Pods_MpzReader_Example.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,7 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				61BF55DC507488941831312E /* Pods_MpzReader_Tests.framework in Frameworks */,
+				7F551239B99DB180BF52EBAD /* Pods_MpzReader_Tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,10 +82,10 @@
 		1A8986284FC54CA2411CFE21 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				508D18314468310EFE6EAB74 /* Pods-MpzReader_Example.debug.xcconfig */,
-				FC0C9F9FB3B1206D47642C28 /* Pods-MpzReader_Example.release.xcconfig */,
-				08790FD4F67A58AB9D6E272B /* Pods-MpzReader_Tests.debug.xcconfig */,
-				0B28402F54671F4DC56F5463 /* Pods-MpzReader_Tests.release.xcconfig */,
+				F2659AFC032ADF7623EF2136 /* Pods-MpzReader_Example.debug.xcconfig */,
+				189B7B650264F316A2353A13 /* Pods-MpzReader_Example.release.xcconfig */,
+				ED72DD4B46F7ADFC29A8D4CC /* Pods-MpzReader_Tests.debug.xcconfig */,
+				0157108341BF83894805E4A0 /* Pods-MpzReader_Tests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -98,7 +98,7 @@
 				607FACE81AFB9204008FA782 /* Tests */,
 				607FACD11AFB9204008FA782 /* Products */,
 				1A8986284FC54CA2411CFE21 /* Pods */,
-				BBF4849967FDA4AA459B9226 /* Frameworks */,
+				7603FF9FA3B1F74D738555B5 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -165,11 +165,11 @@
 			name = "Podspec Metadata";
 			sourceTree = "<group>";
 		};
-		BBF4849967FDA4AA459B9226 /* Frameworks */ = {
+		7603FF9FA3B1F74D738555B5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				E123D20241EB9F04F3C5908C /* Pods_MpzReader_Example.framework */,
-				C5F20B57DCC8D68114F04D4F /* Pods_MpzReader_Tests.framework */,
+				A6A426D492CF1F926CADEC35 /* Pods_MpzReader_Example.framework */,
+				190FB64603FADCD1B990882C /* Pods_MpzReader_Tests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -181,11 +181,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 607FACEF1AFB9204008FA782 /* Build configuration list for PBXNativeTarget "MpzReader_Example" */;
 			buildPhases = (
-				B516F87A9506565861CCEC15 /* [CP] Check Pods Manifest.lock */,
+				6AA199BBA225774FE31C61B3 /* [CP] Check Pods Manifest.lock */,
 				607FACCC1AFB9204008FA782 /* Sources */,
 				607FACCD1AFB9204008FA782 /* Frameworks */,
 				607FACCE1AFB9204008FA782 /* Resources */,
-				FBC2B932A8B2AD4129FA6205 /* [CP] Embed Pods Frameworks */,
+				D9D8070782BEBEAC06C47ABF /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -200,7 +200,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 607FACF21AFB9204008FA782 /* Build configuration list for PBXNativeTarget "MpzReader_Tests" */;
 			buildPhases = (
-				4830983CDC89B114B98D4F91 /* [CP] Check Pods Manifest.lock */,
+				C47936A24C10F3823A37FB0F /* [CP] Check Pods Manifest.lock */,
 				607FACE11AFB9204008FA782 /* Sources */,
 				607FACE21AFB9204008FA782 /* Frameworks */,
 				607FACE31AFB9204008FA782 /* Resources */,
@@ -284,29 +284,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		4830983CDC89B114B98D4F91 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MpzReader_Tests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		B516F87A9506565861CCEC15 /* [CP] Check Pods Manifest.lock */ = {
+		6AA199BBA225774FE31C61B3 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -328,7 +306,29 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		FBC2B932A8B2AD4129FA6205 /* [CP] Embed Pods Frameworks */ = {
+		C47936A24C10F3823A37FB0F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MpzReader_Tests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D9D8070782BEBEAC06C47ABF /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -337,16 +337,22 @@
 				"${PODS_ROOT}/Target Support Files/Pods-MpzReader_Example/Pods-MpzReader_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Cache/Cache.framework",
 				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/DifferenceKit/DifferenceKit.framework",
 				"${BUILT_PRODUCTS_DIR}/Fuzi/Fuzi.framework",
-				"${BUILT_PRODUCTS_DIR}/GCDWebServer/GCDWebServer.framework",
 				"${BUILT_PRODUCTS_DIR}/Imaginary/Imaginary.framework",
 				"${BUILT_PRODUCTS_DIR}/Lightbox/Lightbox.framework",
 				"${BUILT_PRODUCTS_DIR}/Minizip/Minizip.framework",
 				"${BUILT_PRODUCTS_DIR}/MpzReader/MpzReader.framework",
-				"${BUILT_PRODUCTS_DIR}/R2Navigator/R2Navigator.framework",
-				"${BUILT_PRODUCTS_DIR}/R2Shared/R2Shared.framework",
-				"${BUILT_PRODUCTS_DIR}/R2Streamer/R2Streamer.framework",
+				"${BUILT_PRODUCTS_DIR}/ReadiumAdapterGCDWebServer/ReadiumAdapterGCDWebServer.framework",
+				"${BUILT_PRODUCTS_DIR}/ReadiumFuzi/ReadiumFuzi.framework",
+				"${BUILT_PRODUCTS_DIR}/ReadiumGCDWebServer/ReadiumGCDWebServer.framework",
+				"${BUILT_PRODUCTS_DIR}/ReadiumInternal/ReadiumInternal.framework",
+				"${BUILT_PRODUCTS_DIR}/ReadiumNavigator/ReadiumNavigator.framework",
+				"${BUILT_PRODUCTS_DIR}/ReadiumShared/ReadiumShared.framework",
+				"${BUILT_PRODUCTS_DIR}/ReadiumStreamer/ReadiumStreamer.framework",
+				"${BUILT_PRODUCTS_DIR}/ReadiumZIPFoundation/ReadiumZIPFoundation.framework",
 				"${BUILT_PRODUCTS_DIR}/SQLite.swift/SQLite.framework",
+				"${BUILT_PRODUCTS_DIR}/ScreenShield/ScreenShield.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftSoup/SwiftSoup.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/ZIPFoundation/ZIPFoundation.framework",
@@ -355,16 +361,22 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Cache.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DifferenceKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Fuzi.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GCDWebServer.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Imaginary.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Lightbox.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Minizip.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MpzReader.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/R2Navigator.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/R2Shared.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/R2Streamer.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReadiumAdapterGCDWebServer.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReadiumFuzi.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReadiumGCDWebServer.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReadiumInternal.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReadiumNavigator.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReadiumShared.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReadiumStreamer.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReadiumZIPFoundation.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SQLite.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ScreenShield.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftSoup.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZIPFoundation.framework",
@@ -469,7 +481,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -515,7 +527,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
@@ -525,12 +537,12 @@
 		};
 		607FACF01AFB9204008FA782 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 508D18314468310EFE6EAB74 /* Pods-MpzReader_Example.debug.xcconfig */;
+			baseConfigurationReference = F2659AFC032ADF7623EF2136 /* Pods-MpzReader_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 8LCLFP684Z;
 				INFOPLIST_FILE = MpzReader/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
@@ -543,12 +555,12 @@
 		};
 		607FACF11AFB9204008FA782 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FC0C9F9FB3B1206D47642C28 /* Pods-MpzReader_Example.release.xcconfig */;
+			baseConfigurationReference = 189B7B650264F316A2353A13 /* Pods-MpzReader_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 8LCLFP684Z;
 				INFOPLIST_FILE = MpzReader/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
@@ -561,7 +573,7 @@
 		};
 		607FACF31AFB9204008FA782 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 08790FD4F67A58AB9D6E272B /* Pods-MpzReader_Tests.debug.xcconfig */;
+			baseConfigurationReference = ED72DD4B46F7ADFC29A8D4CC /* Pods-MpzReader_Tests.debug.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = 8LCLFP684Z;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -584,7 +596,7 @@
 		};
 		607FACF41AFB9204008FA782 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0B28402F54671F4DC56F5463 /* Pods-MpzReader_Tests.release.xcconfig */;
+			baseConfigurationReference = 0157108341BF83894805E4A0 /* Pods-MpzReader_Tests.release.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = 8LCLFP684Z;
 				FRAMEWORK_SEARCH_PATHS = (

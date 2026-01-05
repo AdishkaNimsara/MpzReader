@@ -1,15 +1,33 @@
+# Readium CocoaPods Specs repo
+source 'https://github.com/readium/podspecs'
+# Default CocoaPods repo
+source 'https://cdn.cocoapods.org/'
+
+platform :ios, '16.0'
+
 use_frameworks!
 
 target 'MpzReader_Example' do
-  pod 'GCDWebServer', :git => 'https://github.com/edrlab/GCDWebServer.git', :tag => '3.6.2'
-  pod 'R2Shared', :git => 'https://github.com/mapalagama93/r2-shared-swift.git', :branch => 'develop'
-  pod 'R2Streamer', :git => 'https://github.com/mapalagama93/r2-streamer-swift.git', :branch => 'develop'
-  pod 'R2Navigator', :path => '../r2-navigator-swift'
+  
+  # Local library
   pod 'MpzReader', :path => '../'
+
+  # Readium v3 libraries
+  pod 'ReadiumShared',   '~> 3.0.0'
+  pod 'ReadiumStreamer', '~> 3.0.0'
+  pod 'ReadiumNavigator','~> 3.0.0'
+  pod 'ReadiumAdapterGCDWebServer', '~> 3.0.0'
 
   target 'MpzReader_Tests' do
     inherit! :search_paths
+  end
+end
 
-    
+# Ensure all pods match the deployment target
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.0'
+    end
   end
 end

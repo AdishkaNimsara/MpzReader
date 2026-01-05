@@ -7,15 +7,18 @@
 
 import Foundation
 import UIKit
-import R2Navigator
-import R2Shared
+import ReadiumNavigator
+import ReadiumShared
+import ReadiumAdapterGCDWebServer
 import WebKit
 import SwiftyJSON
 import Lightbox
 import ScreenShield
+
 protocol MpzBookViewSettingsDelegate {
-    func getUserSettings() -> UserSettings
-    func updateUserSettings()
+    // Removed: func getUserSettings() -> UserSettings
+    // Removed: func updateUserSettings()
+    // Settings now use EPUBPreferences directly via the navigator
     func updateReaderColors()
 }
 
@@ -27,17 +30,18 @@ class MpzBookVC : UIViewController {
     private var leftBarButtons = [UIBarButtonItem]()
     var epubNavigator : MpzEpubNavigatorController!
     var reader : MpzReader!
+    var httpServer: HTTPServer! // Required for serving publication content in Readium 3.x
     var scripts = [WKUserScript]()
     var jsEventHandlers = [String : (Any) -> Void]()
     var isColorHighlightMode = false
     var defaultHightlightColor = "#C9FB53"
-    var bookmark : Bookmark!
+    //var bookmark : Bookmark!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.initializeScripts()
         self.initializeHandlers()
-        self.initializeBookmark()
+        //self.initializeBookmark()
         self.setupViews()
         self.initializeSettingsView()
         applyScreenshotProtection()
@@ -46,6 +50,9 @@ class MpzBookVC : UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let vc = segue.destination as? MpzSettingsVC {
             vc.delegate = self
+            // Pass the navigator instance to settings VC
+            // Note: epubNavigator is now typealias for EPUBNavigatorViewController
+            vc.navigator = self.epubNavigator
         }
     }
     
@@ -105,14 +112,17 @@ class MpzBookVC : UIViewController {
 
 extension MpzBookVC {
     
-    var navigatorAppearance : UserProperty? {
-        if let appearance = self.epubNavigator.userSettings.userProperties.getProperty(reference: ReadiumCSSReference.appearance.rawValue) as? Enumerable {
-            return appearance
-        }
-        return nil
+    /// Get the current theme from the navigator's preferences
+    /// Note: Preferences API needs further investigation in Readium 3.x
+    var currentTheme: Theme? {
+        // TODO: Fix preferences access in Readium 3.x
+        // The preferences API may have changed or requires different access pattern
+        return nil // Default to light theme for now
     }
     
     func setupViews() {
+        // Migration: Commenting out legacy action setup for now
+        /*
         var actions = [EditingAction]()
         if MpzReader.configs.isShareEnabled {
             actions.append(.share)
@@ -120,58 +130,78 @@ extension MpzBookVC {
         if MpzReader.configs.isLookupEnabled {
             actions.append(.lookup)
         }
+        */
         
         var initialLocator : Locator?
-        if let loc = self.bookmark.locator {
-            initialLocator = loc
-        }
+//        if let loc = self.bookmark.locator {
+//            initialLocator = loc
+//        }
         
-        var configs = EPUBNavigatorViewController.Configuration.init()
-        configs.editingActions = actions
+        // Migration: Configuration setup
+        var config = EPUBNavigatorViewController.Configuration()
+        
+        // config.editingActions = actions // Not directly supported in simple config init or changed API
+        
+        // Migration: Scripts and Event Handlers need to be migrated to UserScript mechanism
+        // For now, we disable them to get basic opening working
+        /*
         configs.customScripts = scripts
         configs.jsEventHandlers = jsEventHandlers
         configs.transformHtml = MpzReader.configs.onHtmlTransform
-        if let publication = self.reader.pubBox?.publication, let container = self.reader.pubBox?.associatedContainer {
-            try! self.reader.server?.add(publication, with: container)
-            self.epubNavigator = MpzEpubNavigatorController(publication: publication,
-                                                            epubFolderPath: self.reader.extracToPath,
-                                                            resourcesServer :  self.reader.server!,
-                                                            initialLocation: initialLocator,
-                                                            config: configs)
-            self.epubNavigator.delegate = self
-            self.epubNavigator.didMove(toParent: self)
-        }else{
-            print("publication or server nil. cannot create EPUBNavigator")
-        }
+        */
         
-        if self.epubNavigator != nil {
-            if let columnSettings = self.epubNavigator.userSettings.userProperties.getProperty(reference: ReadiumCSSReference.columnCount.rawValue) as? Enumerable {
-                columnSettings.index = 1
-            }
-            addChild(self.epubNavigator)
-        }else{
-            self.dismiss(animated: true, completion: {
-                MpzReader.configs.onDismiss?()
-                MpzReader.configs.onError?()
-            })
+        guard let publication = self.reader.publication else {
+            print("publication nil. cannot create EPUBNavigator")
+            self.dismiss(animated: true) { MpzReader.configs.onError?() }
             return
         }
         
-        stackView.addArrangedSubview(self.epubNavigator.view)
+        do {
+            // Create HTTP server for serving publication content
+            // In Readium 3.x, GCDHTTPServer requires an assetRetriever parameter
+            self.httpServer = GCDHTTPServer(assetRetriever: self.reader.assetRetriever)
+            
+            // Create MpzEpubNavigatorController which inherits from EPUBNavigatorViewController
+            // In Readium 3.x, it inherits all initializers automatically
+            self.epubNavigator = try MpzEpubNavigatorController(
+                publication: publication,
+                initialLocation: initialLocator,
+                config: config,
+                httpServer: self.httpServer
+            )
+            
+            //self.epubNavigator.delegate = self
+            
+            // Add navigator to view hierarchy
+            self.addChild(self.epubNavigator)
+            self.epubNavigator.view.translatesAutoresizingMaskIntoConstraints = false
+            self.stackView.addArrangedSubview(self.epubNavigator.view)
+            self.epubNavigator.didMove(toParent: self)
+            
+        } catch {
+            print("Error creating navigator: \(error)")
+            self.dismiss(animated: true) { MpzReader.configs.onError?() }
+            return
+        }
+        
+        
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.markHighlights()
         }
         
+        // Migration: Highlights temporarily commented if they depend on scripts
+        /*
         if MpzReader.configs.isHighlightsEnabled {
             setupHighlightMenu()
         }
+        */
         updateReaderUI()
         setupNavigationButtons()
     }
     
     
     func updateReaderUI() {
-        let colors = reader.getColors(forAppearance: self.navigatorAppearance)
+        let colors = reader.getColors(forTheme: self.currentTheme)
         self.epubNavigator.view.backgroundColor = colors.background
         self.view.backgroundColor = colors.background
         self.navigationController?.navigationBar.isTranslucent = false
@@ -217,18 +247,21 @@ extension MpzBookVC {
     }
     
     @objc func didClickContent() {
-        let vc = MPZPageViewController.create(withHightlights: Highlight.list, highlightDelegate: self, publication: reader.pubBox!.publication, contentDelegate: self)
-        self.navigationController?.pushViewController(vc, animated: true)
+        guard let publication = reader.publication else { return }
+        //let vc = MPZPageViewController.create(withHightlights: Highlight.list, highlightDelegate: self, publication: publication, contentDelegate: self)
+        //self.navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc func didClickHighlightsNav() {
-        let vc = HighlightListVC.create(withHightlights: Highlight.list, delegate: self)
-        self.navigationController?.pushViewController(vc, animated: true)
+        //let vc = HighlightListVC.create(withHightlights: Highlight.list, delegate: self)
+        //self.navigationController?.pushViewController(vc, animated: true)
     }
+    
     
     @objc func didClickSettings(_ button : UIBarButtonItem) {
         self.settingsView.isUserInteractionEnabled = true
         self.settingsView.delegate = self
+        self.settingsView.navigator = self.epubNavigator // Pass navigator reference
         self.settingsView.prepare()
         self.settingsView.clickHide = {
             self.settingsView.isUserInteractionEnabled = false
@@ -248,7 +281,7 @@ extension MpzBookVC {
     }
     
     @objc func didBookmark(_ sender: Any) {
-        saveBookmark()
+        //saveBookmark()
         let bookmarkImage = UIImage.inBundle(named: "bookmark-large")
         let bView = UIImageView.init(image: bookmarkImage)
         bView.frame = CGRect.init(x: stackView.frame.width - 100, y: -100, width: 100, height: 100)
@@ -277,65 +310,59 @@ extension MpzBookVC : UIPopoverPresentationControllerDelegate {
     }
 }
 
-extension MpzBookVC : EPUBNavigatorDelegate {
-    
-    func initializeBookmark() {
-        self.bookmark = Bookmark.get(forBook: self.reader.book.id)
-    }
-    
-    func saveBookmark() {
-        guard
-            let locator = epubNavigator.currentLocation,
-            let resourceIndex = reader.pubBox!.publication.readingOrder.firstIndex(withHref: locator.href) else
-        {
-            return
-        }
-        self.bookmark.locator = locator
-        self.bookmark.resourceIndex = resourceIndex
-        print("save bookmark")
-        self.bookmark.save()
-    }
-    
-    func navigator(_ navigator: Navigator, presentExternalURL url: URL) {
-        
-    }
-    
-    func navigator(_ navigator: Navigator, locationDidChange locator: Locator) {
-        print("location did changed")
-        self.markHighlights()
-        if !MpzReader.configs.isEnableManualBookmarking {
-            self.saveBookmark()
-        }
-    }
-    
-    func navigator(_ navigator: Navigator, presentError error: NavigatorError) {
-        print("navigator present error", error.errorDescription as Any)
-    }
-    
-}
+//extension MpzBookVC : EPUBNavigatorDelegate {
+//    
+//    func initializeBookmark() {
+//        self.bookmark = Bookmark.get(forBook: self.reader.book.id)
+//    }
+//    
+//    func saveBookmark() {
+//        guard
+//            let locator = epubNavigator.currentLocation,
+//            let publication = reader.publication,
+//            let resourceIndex = publication.readingOrder.firstIndex(withHREF: locator.href) else
+//        {
+//            return
+//        }
+//        self.bookmark.locator = locator
+//        self.bookmark.resourceIndex = resourceIndex
+//        print("save bookmark")
+//        self.bookmark.save()
+//    }
+//    
+//    func navigator(_ navigator: Navigator, presentExternalURL url: URL) {
+//        // Handle external URL if needed
+//    }
+//    
+//    func navigator(_ navigator: Navigator, locationDidChange locator: Locator) {
+//        print("location did changed")
+//        self.markHighlights()
+//        if !MpzReader.configs.isEnableManualBookmarking {
+//            self.saveBookmark()
+//        }
+//    }
+//    
+//    func navigator(_ navigator: Navigator, presentError error: any Error) {
+//        print("navigator present error", error.localizedDescription)
+//    }
+//    
+//}
 
 extension MpzBookVC : MpzBookViewSettingsDelegate {
     func updateReaderColors() {
         self.updateReaderUI()
     }
     
-    func getUserSettings() -> UserSettings {
-        return self.epubNavigator.userSettings
-    }
-    
-    func updateUserSettings() {
-        self.epubNavigator.userSettings.save()
-        self.epubNavigator.updateUserSettingStyle()
-    }
-    
+    // Note: getUserSettings() and updateUserSettings() have been removed.
+    // Settings now use EPUBPreferences directly via the navigator.
 }
 
-extension MpzBookVC : MpzContentsDelegate {
-    func contentRequest(navigateTo locator: Locator) {
-        let _ = self.epubNavigator.go(to: locator, animated: true, completion: {})
-    }
-    
-}
+//extension MpzBookVC : MpzContentsDelegate {
+//    func contentRequest(navigateTo locator: Locator) {
+//        let _ = self.epubNavigator.go(to: locator, animated: true, completion: {})
+//    }
+//    
+//}
 
 
 extension UIViewController {

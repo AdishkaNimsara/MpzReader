@@ -7,7 +7,7 @@
 
 import Foundation
 import UIKit
-import R2Shared
+import ReadiumShared
 import ScreenShield
 class MPZPageViewController : UIPageViewController {
     

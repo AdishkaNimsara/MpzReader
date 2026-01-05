@@ -28,8 +28,8 @@ TODO: Add long description of the pod here.
   s.source           = { :git => 'https://github.com/mapalagama93/MpzReader.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
   s.xcconfig  = {'HEADER_SEARCH_PATHS' => '$(SDKROOT)/usr/include/libxml2'}
-  s.ios.deployment_target = '10.0'
-  s.swift_version = '5.0'
+  s.ios.deployment_target = '14.0'
+  s.swift_version = '5.8'
 
   s.source_files = 'MpzReader/Classes/**/*'
   s.vendored_frameworks =  []
@@ -47,12 +47,15 @@ TODO: Add long description of the pod here.
    s.dependency 'SQLite.swift'
    s.dependency 'SwiftyJSON'
    s.dependency 'ZIPFoundation'
-   s.dependency 'R2Shared'
-   s.dependency 'R2Streamer'
-   s.dependency 'R2Navigator'
+
    s.dependency 'CryptoSwift'
    s.dependency 'Fuzi'
    s.dependency 'Minizip'
    s.dependency 'Lightbox'
    s.dependency 'ScreenShield'
+   
+   s.dependency 'ReadiumShared',   '~> 3.0.0'
+   s.dependency 'ReadiumStreamer', '~> 3.0.0'
+   s.dependency 'ReadiumNavigator','~> 3.0.0'
+   s.dependency 'ReadiumAdapterGCDWebServer', '~> 3.0.0'
 end
