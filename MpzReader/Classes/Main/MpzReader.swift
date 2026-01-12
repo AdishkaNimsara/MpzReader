@@ -55,12 +55,16 @@ public class MpzReader {
         let httpClient = DefaultHTTPClient()
         self.assetRetriever = AssetRetriever(httpClient: httpClient)
         
+        // Initialize Custom Content Protection
+        let contentProtection = AESContentProtection()
+        
         self.publicationOpener = PublicationOpener(
             parser: DefaultPublicationParser(
                 httpClient: httpClient,
                 assetRetriever: self.assetRetriever,
                 pdfFactory: DefaultPDFDocumentFactory()
-            )
+            ),
+            contentProtections: [contentProtection]
         )
         
         // Convert URL to FileURL
@@ -86,7 +90,7 @@ public class MpzReader {
             print("EPUB opened successfully at \(self.book.epubPath)")
             
             // Extract if needed (optional - you may not need this with GCDWebServer adapter)
-            self.extractEpubIfNeeded()
+            //self.extractEpubIfNeeded()
             
         case .failure(let error):
             throw error
@@ -112,28 +116,28 @@ public class MpzReader {
         // If you don't actually need extraction, you can remove this method entirely
         // The GCDWebServer adapter handles serving from archives automatically
         
-        guard FileManager.default.fileExists(atPath: self.book.epubPath.path) else {
-            print("EPUB file not found at path")
-            return
-        }
-        
-        do {
-            var tmpFolder = URL(fileURLWithPath: NSTemporaryDirectory())
-            tmpFolder = tmpFolder.appendingPathComponent(UUID().uuidString)
-            try FileManager.default.createDirectory(at: tmpFolder, withIntermediateDirectories: true, attributes: nil)
-            
-            self.extractToPath = tmpFolder
-            print("Extracting EPUB to: \(tmpFolder)")
-            
-            // Extract using ZIPFoundation directly from the EPUB file
-            let fileManager = FileManager()
-            try fileManager.unzipItem(at: self.book.epubPath, to: tmpFolder)
-            
-            print("EPUB extracted successfully")
-        } catch {
-            print("Error extracting EPUB: \(error.localizedDescription)")
-            // Don't fail - extraction is optional with Readium 3.x
-        }
+//        guard FileManager.default.fileExists(atPath: self.book.epubPath.path) else {
+//            print("EPUB file not found at path")
+//            return
+//        }
+//        
+//        do {
+//            var tmpFolder = URL(fileURLWithPath: NSTemporaryDirectory())
+//            tmpFolder = tmpFolder.appendingPathComponent(UUID().uuidString)
+//            try FileManager.default.createDirectory(at: tmpFolder, withIntermediateDirectories: true, attributes: nil)
+//            
+//            self.extractToPath = tmpFolder
+//            print("Extracting EPUB to: \(tmpFolder)")
+//            
+//            // Extract using ZIPFoundation directly from the EPUB file
+//            let fileManager = FileManager()
+//            try fileManager.unzipItem(at: self.book.epubPath, to: tmpFolder)
+//            
+//            print("EPUB extracted successfully")
+//        } catch {
+//            print("Error extracting EPUB: \(error.localizedDescription)")
+//            // Don't fail - extraction is optional with Readium 3.x
+//        }
     }
     
     private func initializeDatabase() {
