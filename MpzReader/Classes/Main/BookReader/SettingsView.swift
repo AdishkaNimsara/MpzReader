@@ -49,7 +49,7 @@ class SettingsView: UIView {
     func prepare() {
         setupFontSize()
         setModeUI()
-        setScrollModeUI()
+        //setScrollModeUI()
     }
     
     @IBAction func didClickOutside(_ sender: Any) {

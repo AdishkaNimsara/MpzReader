@@ -374,30 +374,31 @@ extension UIViewController {
     /// This function restructures the view hierarchy to protect it from screenshots.
     func applyScreenshotProtection() {
         
-        if view.viewWithTag(Constants.protectionContainerTag) != nil {
-            print("Screenshot protection has already been applied.")
-            return
-        }
-
-        let container = UIView()
-        container.translatesAutoresizingMaskIntoConstraints = false
-        container.backgroundColor = .clear
-        container.tag = Constants.protectionContainerTag
-
-        self.view.addSubview(container)
-
-        NSLayoutConstraint.activate([
-            container.topAnchor.constraint(equalTo: self.view.topAnchor),
-            container.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
-            container.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
-            container.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
-        ])
-        
-        for subview in self.view.subviews where subview !== container {
-            container.addSubview(subview)
-        }
-        
-        ScreenShield.shared.protect(view: container)
-        ScreenShield.shared.protectFromScreenRecording()
+//        if view.viewWithTag(Constants.protectionContainerTag) != nil {
+//            print("Screenshot protection has already been applied.")
+//            return
+//        }
+//
+//        let container = UIView()
+//        container.translatesAutoresizingMaskIntoConstraints = false
+//        container.backgroundColor = .clear
+//        container.tag = Constants.protectionContainerTag
+//
+//        self.view.addSubview(container)
+//
+//        NSLayoutConstraint.activate([
+//            container.topAnchor.constraint(equalTo: self.view.topAnchor),
+//            container.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+//            container.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+//            container.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
+//        ])
+//        
+//        for subview in self.view.subviews where subview !== container {
+//            container.addSubview(subview)
+//        }
+//        
+//        ScreenShield.shared.protect(view: container)
+//        ScreenShield.shared.protectFromScreenRecording()
     }
 }
+

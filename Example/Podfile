@@ -17,6 +17,7 @@ target 'MpzReader_Example' do
   pod 'ReadiumStreamer', '~> 3.0.0'
   pod 'ReadiumNavigator','~> 3.0.0'
   pod 'ReadiumAdapterGCDWebServer', '~> 3.0.0'
+  pod 'ScreenProtectorKit'
 
   target 'MpzReader_Tests' do
     inherit! :search_paths

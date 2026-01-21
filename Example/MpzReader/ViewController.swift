@@ -24,18 +24,21 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
             MpzBook.init(withPath: urlFor(book: "2"), id : "2", name : "Robin hood"),
             MpzBook.init(withPath: urlFor(book: "3"), id : "3", name : "Alevikarana"),
             MpzBook.init(withPath: urlFor(book: "4"), id : "4", name : "Hediyakage dina potha"),
-            MpzBook.init(withPath: urlFor(book: "5"), id : "5", name : "Kurrodaya")
+            MpzBook.init(withPath: urlFor(book: "5"), id : "5", name : "Kurrodaya"),
+            MpzBook.init(withPath: urlFor(book: "test"), id : "test", name : "test"),
+            MpzBook.init(withPath: urlFor(book: "test1"), id : "test1", name : "test1"),
+            MpzBook.init(withPath: urlFor(book: "test2"), id : "test2", name : "test2")
         ]
         tableView.delegate = self
         tableView.dataSource = self
     }
-
+    
     func urlFor(book : String) -> URL {
         let url = Bundle.main.path(forResource: book, ofType: "epub")
         return URL.init(fileURLWithPath: url!)
     }
     
-
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return list.count
     }
