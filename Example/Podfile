@@ -13,6 +13,7 @@ target 'MpzReader_Example' do
   pod 'MpzReader', :path => '../'
 
   # Readium v3 libraries
+  pod 'RNCryptor', '~> 5.0'
   pod 'ReadiumShared',   '~> 3.0.0'
   pod 'ReadiumStreamer', '~> 3.0.0'
   pod 'ReadiumNavigator','~> 3.0.0'
