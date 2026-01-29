@@ -1,15 +1,36 @@
+platform :ios, '16.0'
+
 use_frameworks!
-
+ 
 target 'MpzReader_Example' do
-  pod 'GCDWebServer', :git => 'https://github.com/edrlab/GCDWebServer.git', :tag => '3.6.2'
-  pod 'R2Shared', :git => 'https://github.com/mapalagama93/r2-shared-swift.git', :branch => 'develop'
-  pod 'R2Streamer', :git => 'https://github.com/mapalagama93/r2-streamer-swift.git', :branch => 'develop'
-  pod 'R2Navigator', :path => '../r2-navigator-swift'
-  pod 'MpzReader', :path => '../'
 
+  pod 'ScreenProtectorKit'
+  pod 'GCDWebServer', :git => 'https://github.com/edrlab/GCDWebServer.git', :tag => '3.6.2'
+  pod 'R2Shared',    :git => 'https://github.com/mapalagama93/r2-shared-swift.git',    :branch => 'develop'
+  pod 'R2Streamer',  :git => 'https://github.com/mapalagama93/r2-streamer-swift.git',  :branch => 'develop'
+  pod 'R2Navigator', :git => 'https://github.com/mapalagama93/r2-navigator-swift.git', :branch => 'develop'
+  pod 'MpzReader', :path => '../'
+ 
   target 'MpzReader_Tests' do
+
     inherit! :search_paths
 
-    
   end
+
 end
+ 
+post_install do |installer|
+
+  installer.pods_project.targets.each do |target|
+
+    target.build_configurations.each do |config|
+
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '16.0'
+
+    end
+
+  end
+
+end
+
+ 

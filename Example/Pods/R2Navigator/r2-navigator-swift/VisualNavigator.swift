@@ -42,31 +42,21 @@ public extension VisualNavigator {
     @discardableResult
     func goLeft(animated: Bool = false, completion: @escaping () -> Void = {}) -> Bool {
         switch readingProgression {
-        case .ltr, .auto:
+        case .ltr, .ttb, .auto:
             return goBackward(animated: animated, completion: completion)
-        case .rtl:
+        case .rtl, .btt:
             return goForward(animated: animated, completion: completion)
-        case .ttb:
-            print("ttb")
-        case .btt:
-            print("btt")
         }
-        return false
     }
     
     @discardableResult
     func goRight(animated: Bool = false, completion: @escaping () -> Void = {}) -> Bool {
         switch readingProgression {
-        case .ltr, .auto:
+        case .ltr, .ttb, .auto:
             return goForward(animated: animated, completion: completion)
-        case .rtl:
+        case .rtl, .btt:
             return goBackward(animated: animated, completion: completion)
-        case .ttb:
-            print("ttb")
-        case .btt:
-            print("btt")
         }
-        return false
     }
     
 }

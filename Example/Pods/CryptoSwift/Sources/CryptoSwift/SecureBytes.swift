@@ -1,7 +1,7 @@
 //
 //  CryptoSwift
 //
-//  Copyright (C) 2014-2017 Marcin Krzyżanowski <marcin@krzyzanowskim.com>
+//  Copyright (C) 2014-2025 Marcin Krzyżanowski <marcin@krzyzanowskim.com>
 //  This software is provided 'as-is', without any express or implied warranty.
 //
 //  In no event will the authors be held liable for any damages arising from the use of this software.
@@ -14,9 +14,13 @@
 //
 
 #if canImport(Darwin)
-  import Darwin
-#else
-  import Glibc
+import Darwin
+#elseif canImport(Glibc)
+import Glibc
+#elseif canImport(Musl)
+import Musl
+#elseif canImport(WinSDK)
+import WinSDK
 #endif
 
 typealias Key = SecureBytes
@@ -31,13 +35,25 @@ final class SecureBytes {
     self.bytes = bytes
     self.count = bytes.count
     self.bytes.withUnsafeBufferPointer { (pointer) -> Void in
-      mlock(pointer.baseAddress, pointer.count)
+      #if os(Windows)
+        VirtualLock(UnsafeMutableRawPointer(mutating: pointer.baseAddress), SIZE_T(pointer.count))
+      #elseif os(WASI)
+        // not supported on WASI
+      #else
+        mlock(pointer.baseAddress, pointer.count)
+      #endif
     }
   }
 
   deinit {
     self.bytes.withUnsafeBufferPointer { (pointer) -> Void in
-      munlock(pointer.baseAddress, pointer.count)
+      #if os(Windows)
+        VirtualUnlock(UnsafeMutableRawPointer(mutating: pointer.baseAddress), SIZE_T(pointer.count))
+      #elseif os(WASI)
+        // not supported on WASI
+      #else
+        munlock(pointer.baseAddress, pointer.count)
+      #endif
     }
   }
 }
