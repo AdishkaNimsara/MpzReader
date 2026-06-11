@@ -918,12 +918,18 @@ open class Element: Node {
      */
     class textNodeVisitor: NodeVisitor {
         let accum: StringBuilder
-        init(_ accum: StringBuilder) {
+        let trimAndNormaliseWhitespace: Bool
+        init(_ accum: StringBuilder, trimAndNormaliseWhitespace: Bool) {
             self.accum = accum
+            self.trimAndNormaliseWhitespace = trimAndNormaliseWhitespace
         }
         public func head(_ node: Node, _ depth: Int) {
             if let textNode = (node as? TextNode) {
-                Element.appendNormalisedText(accum, textNode)
+                if trimAndNormaliseWhitespace {
+                    Element.appendNormalisedText(accum, textNode)
+                } else {
+                    accum.append(textNode.getWholeText())
+                }
             } else if let element = (node as? Element) {
                 if !accum.isEmpty &&
                     (element.isBlock() || element._tag.getName() == "br") &&
@@ -936,10 +942,14 @@ open class Element: Node {
         public func tail(_ node: Node, _ depth: Int) {
         }
     }
-    public func text()throws->String {
+    public func text(trimAndNormaliseWhitespace: Bool = true)throws->String {
         let accum: StringBuilder = StringBuilder()
-        try NodeTraversor(textNodeVisitor(accum)).traverse(self)
-        return accum.toString().trim()
+        try NodeTraversor(textNodeVisitor(accum, trimAndNormaliseWhitespace: trimAndNormaliseWhitespace)).traverse(self)
+        let text = accum.toString()
+        if trimAndNormaliseWhitespace {
+            return text.trim()
+        }
+        return text
     }
 
     /**
@@ -1107,7 +1117,9 @@ open class Element: Node {
             if (classAttr.charAt(i).isWhitespace) {
                 if (inClass) {
                     // white space ends a class name, compare it with the requested one, ignore case
-                    if (i - start == wantLen && classAttr.regionMatches(true, start, className, 0, wantLen)) {
+                    if (i - start == wantLen && classAttr.regionMatches(ignoreCase: true, selfOffset: start,
+                                                                        other: className, otherOffset: 0,
+                                                                        targetLength: wantLen)) {
                         return true
                     }
                     inClass = false
@@ -1123,7 +1135,8 @@ open class Element: Node {
 
         // check the last entry
         if (inClass && len - start == wantLen) {
-            return classAttr.regionMatches(true, start, className, 0, wantLen)
+            return classAttr.regionMatches(ignoreCase: true, selfOffset: start,
+                                           other: className, otherOffset: 0, targetLength: wantLen)
         }
 
         return false
@@ -1213,9 +1226,9 @@ open class Element: Node {
         // selfclosing includes unknown tags, isEmpty defines tags that are always empty
         if (childNodes.isEmpty && _tag.isSelfClosing()) {
             if (out.syntax() == OutputSettings.Syntax.html && _tag.isEmpty()) {
-                accum.append(">")
+                accum.append(" />") // <img /> for "always empty" tags. selfclosing is ignored but retained for xml/xhtml compatibility
             } else {
-                accum.append(" />") // <img> in html, <img /> in xml
+                accum.append(" />") // <img /> in xml
             }
         } else {
             accum.append(">")
@@ -1288,6 +1301,14 @@ open class Element: Node {
 		return super.copy(clone: clone, parent: parent)
 	}
 
+    public static func ==(lhs: Element, rhs: Element) -> Bool {
+    	guard lhs as Node == rhs as Node else {
+            return false
+        }
+        
+        return lhs._tag == rhs._tag
+    }
+	
     override public func hash(into hasher: inout Hasher) {
         super.hash(into: &hasher)
         hasher.combine(_tag)

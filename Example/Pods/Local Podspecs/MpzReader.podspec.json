@@ -19,9 +19,9 @@
     "HEADER_SEARCH_PATHS": "$(SDKROOT)/usr/include/libxml2"
   },
   "platforms": {
-    "ios": "10.0"
+    "ios": "14.0"
   },
-  "swift_versions": "5.0",
+  "swift_versions": "5.8",
   "source_files": "MpzReader/Classes/**/*",
   "vendored_frameworks": [
 
@@ -46,15 +46,6 @@
     "ZIPFoundation": [
 
     ],
-    "R2Shared": [
-
-    ],
-    "R2Streamer": [
-
-    ],
-    "R2Navigator": [
-
-    ],
     "CryptoSwift": [
 
     ],
@@ -66,7 +57,25 @@
     ],
     "Lightbox": [
 
+    ],
+    "ScreenShield": [
+
+    ],
+    "ReadiumShared": [
+      "~> 3.0.0"
+    ],
+    "ReadiumStreamer": [
+      "~> 3.0.0"
+    ],
+    "ReadiumNavigator": [
+      "~> 3.0.0"
+    ],
+    "ReadiumAdapterGCDWebServer": [
+      "~> 3.0.0"
+    ],
+    "RNCryptor": [
+      "~> 5.0"
     ]
   },
-  "swift_version": "5.0"
+  "swift_version": "5.8"
 }

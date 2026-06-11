@@ -10,7 +10,7 @@ import ReadiumStreamer
 import ReadiumShared
 import ReadiumNavigator
 import SQLite
-import ZIPFoundation
+//import ZIPFoundation
 public class MpzReader {
     
     public static var configs = MpzConfig()

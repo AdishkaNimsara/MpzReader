@@ -1,6 +1,0 @@
-framework module R2Navigator {
-  umbrella header "R2Navigator-umbrella.h"
-
-  export *
-  module * { export * }
-}

@@ -22,6 +22,7 @@ PODS:
     - ReadiumNavigator (~> 3.0.0)
     - ReadiumShared (~> 3.0.0)
     - ReadiumStreamer (~> 3.0.0)
+    - RNCryptor (~> 5.0)
     - ScreenShield
     - SQLite.swift
     - SwiftyJSON
@@ -108,7 +109,7 @@ SPEC CHECKSUMS:
   Imaginary: cf5e3a7dd6ab1dcbd47ba8ce5edf2307c4e99eb3
   Lightbox: cc3d5124f024fa8197fd23f913160db1c61a1852
   Minizip: 188cb3e39a1195c283ae03bf673d182596fefd0b
-  MpzReader: 8890cf16b811845aefee8af7895870df4b470ac5
+  MpzReader: bf673922126b3faa4a621dd079d273ecc6d55272
   ReadiumAdapterGCDWebServer: edbe6ecc9bce600edc05c80d01f4bb1f9ae88a34
   ReadiumFuzi: fb19b82ff8f089b27c735c216c877666cd84d70f
   ReadiumGCDWebServer: 9bf72ab96592d0fdd0f2c941c269e9fd12d79299

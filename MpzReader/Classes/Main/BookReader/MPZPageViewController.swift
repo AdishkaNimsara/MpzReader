@@ -34,7 +34,7 @@ class MPZPageViewController : UIPageViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        applyScreenshotProtection()
+        //applyScreenshotProtection()
         segmentedControl = UISegmentedControl(items: ["Contents", "Highlights"])
         segmentedControl.addTarget(self, action: #selector(MPZPageViewController.didSwitchMenu(_:)), for: UIControl.Event.valueChanged)
         segmentedControl.selectedSegmentIndex = index

@@ -20,6 +20,9 @@
 		74F60BBE24F7BA350012A339 /* 2.epub in Resources */ = {isa = PBXBuildFile; fileRef = 74F60BBD24F7BA350012A339 /* 2.epub */; };
 		74F60BC024F7BA3B0012A339 /* 1.epub in Resources */ = {isa = PBXBuildFile; fileRef = 74F60BBF24F7BA3B0012A339 /* 1.epub */; };
 		7F551239B99DB180BF52EBAD /* Pods_MpzReader_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 190FB64603FADCD1B990882C /* Pods_MpzReader_Tests.framework */; };
+		843946F62F1DE5D900B817AD /* test.epub in Resources */ = {isa = PBXBuildFile; fileRef = 843946F52F1DE5D900B817AD /* test.epub */; };
+		846F636B2F1E0FB300D171CE /* test1.epub in Resources */ = {isa = PBXBuildFile; fileRef = 846F636A2F1E0FB200D171CE /* test1.epub */; };
+		846F636F2F1F3B2900D171CE /* test2.epub in Resources */ = {isa = PBXBuildFile; fileRef = 846F636E2F1F3B2900D171CE /* test2.epub */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +56,9 @@
 		741C029824FCF67500514D67 /* 5.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = 5.epub; sourceTree = "<group>"; };
 		74F60BBD24F7BA350012A339 /* 2.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = 2.epub; sourceTree = "<group>"; };
 		74F60BBF24F7BA3B0012A339 /* 1.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = 1.epub; sourceTree = "<group>"; };
+		843946F52F1DE5D900B817AD /* test.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.epub; sourceTree = "<group>"; };
+		846F636A2F1E0FB200D171CE /* test1.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = test1.epub; sourceTree = "<group>"; };
+		846F636E2F1F3B2900D171CE /* test2.epub */ = {isa = PBXFileReference; lastKnownFileType = file; path = test2.epub; sourceTree = "<group>"; };
 		8AB11BC6B1ECC906594C844B /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		A6A426D492CF1F926CADEC35 /* Pods_MpzReader_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MpzReader_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED72DD4B46F7ADFC29A8D4CC /* Pods-MpzReader_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MpzReader_Tests.debug.xcconfig"; path = "Target Support Files/Pods-MpzReader_Tests/Pods-MpzReader_Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -133,6 +139,9 @@
 				741C029824FCF67500514D67 /* 5.epub */,
 				74F60BBF24F7BA3B0012A339 /* 1.epub */,
 				74F60BBD24F7BA350012A339 /* 2.epub */,
+				843946F52F1DE5D900B817AD /* test.epub */,
+				846F636A2F1E0FB200D171CE /* test1.epub */,
+				846F636E2F1F3B2900D171CE /* test2.epub */,
 				607FACD41AFB9204008FA782 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -266,11 +275,14 @@
 				74F60BC024F7BA3B0012A339 /* 1.epub in Resources */,
 				741C029924FCF67500514D67 /* 3.epub in Resources */,
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
+				846F636B2F1E0FB300D171CE /* test1.epub in Resources */,
 				741C029A24FCF67500514D67 /* 4.epub in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
+				846F636F2F1F3B2900D171CE /* test2.epub in Resources */,
 				741C029B24FCF67500514D67 /* 5.epub in Resources */,
 				74F60BBE24F7BA350012A339 /* 2.epub in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
+				843946F62F1DE5D900B817AD /* test.epub in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -343,6 +355,7 @@
 				"${BUILT_PRODUCTS_DIR}/Lightbox/Lightbox.framework",
 				"${BUILT_PRODUCTS_DIR}/Minizip/Minizip.framework",
 				"${BUILT_PRODUCTS_DIR}/MpzReader/MpzReader.framework",
+				"${BUILT_PRODUCTS_DIR}/RNCryptor/RNCryptor.framework",
 				"${BUILT_PRODUCTS_DIR}/ReadiumAdapterGCDWebServer/ReadiumAdapterGCDWebServer.framework",
 				"${BUILT_PRODUCTS_DIR}/ReadiumFuzi/ReadiumFuzi.framework",
 				"${BUILT_PRODUCTS_DIR}/ReadiumGCDWebServer/ReadiumGCDWebServer.framework",
@@ -352,6 +365,7 @@
 				"${BUILT_PRODUCTS_DIR}/ReadiumStreamer/ReadiumStreamer.framework",
 				"${BUILT_PRODUCTS_DIR}/ReadiumZIPFoundation/ReadiumZIPFoundation.framework",
 				"${BUILT_PRODUCTS_DIR}/SQLite.swift/SQLite.framework",
+				"${BUILT_PRODUCTS_DIR}/ScreenProtectorKit/ScreenProtectorKit.framework",
 				"${BUILT_PRODUCTS_DIR}/ScreenShield/ScreenShield.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftSoup/SwiftSoup.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
@@ -367,6 +381,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Lightbox.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Minizip.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MpzReader.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RNCryptor.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReadiumAdapterGCDWebServer.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReadiumFuzi.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReadiumGCDWebServer.framework",
@@ -376,6 +391,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReadiumStreamer.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReadiumZIPFoundation.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SQLite.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ScreenProtectorKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ScreenShield.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftSoup.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",

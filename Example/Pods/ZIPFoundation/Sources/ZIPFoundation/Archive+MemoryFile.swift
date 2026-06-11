@@ -2,7 +2,7 @@
 //  Archive+MemoryFile.swift
 //  ZIPFoundation
 //
-//  Copyright © 2017-2020 Thomas Zoechling, https://www.peakstep.com and the ZIP Foundation project authors.
+//  Copyright © 2017-2025 Thomas Zoechling, https://www.peakstep.com and the ZIP Foundation project authors.
 //  Released under the MIT License.
 //
 //  See https://github.com/weichsel/ZIPFoundation/blob/master/LICENSE for license information.
@@ -10,89 +10,74 @@
 
 import Foundation
 
+extension Archive {
+    var isMemoryArchive: Bool { return self.url.scheme == memoryURLScheme }
+}
+
 #if swift(>=5.0)
 
 extension Archive {
-    /// Returns a `Data` object containing a representation of the receiver.
-    public var data: Data? { return memoryFile?.data }
 
-    static func configureMemoryBacking(for data: Data, mode: AccessMode)
-        -> (UnsafeMutablePointer<FILE>, MemoryFile)? {
-            let posixMode: String
-            switch mode {
-            case .read: posixMode = "rb"
-            case .create: posixMode = "wb+"
-            case .update: posixMode = "rb+"
-            }
-            let memoryFile = MemoryFile(data: data)
-            guard let archiveFile = memoryFile.open(mode: posixMode) else { return nil }
+    class MemoryFile {
 
-            if mode == .create {
-                let endOfCentralDirectoryRecord = EndOfCentralDirectoryRecord(numberOfDisk: 0, numberOfDiskStart: 0,
-                                                                              totalNumberOfEntriesOnDisk: 0,
-                                                                              totalNumberOfEntriesInCentralDirectory: 0,
-                                                                              sizeOfCentralDirectory: 0,
-                                                                              offsetToStartOfCentralDirectory: 0,
-                                                                              zipFileCommentLength: 0,
-                                                                              zipFileCommentData: Data())
-                _ = endOfCentralDirectoryRecord.data.withUnsafeBytes { (buffer: UnsafeRawBufferPointer) in
-                    fwrite(buffer.baseAddress, buffer.count, 1, archiveFile) // Errors handled during read
-                }
-            }
-            return (archiveFile, memoryFile)
-    }
-}
+        private(set) var data: Data
+        private var offset = 0
 
-class MemoryFile {
-    private(set) var data: Data
-    private var offset  = 0
-
-    init(data: Data = Data()) {
-        self.data = data
-    }
-
-    func open(mode: String) -> UnsafeMutablePointer<FILE>? {
-        let cookie = Unmanaged.passRetained(self)
-        let writable = mode.count > 0 && (mode.first! != "r" || mode.last! == "+")
-        let append = mode.count > 0 && mode.first! == "a"
-        #if os(macOS) || os(iOS) || os(watchOS) || os(tvOS)
-        let result = writable
-            ? funopen(cookie.toOpaque(), readStub, writeStub, seekStub, closeStub)
-            : funopen(cookie.toOpaque(), readStub, nil, seekStub, closeStub)
-        #else
-        let stubs = cookie_io_functions_t(read: readStub, write: writeStub, seek: seekStub, close: closeStub)
-        let result = fopencookie(cookie.toOpaque(), mode, stubs)
-        #endif
-        if append {
-            fseek(result, 0, SEEK_END)
+        init(data: Data = Data()) {
+            self.data = data
         }
-        return result
+
+        func open(mode: AccessMode) throws -> FILEPointer {
+            let cookie = Unmanaged.passRetained(self)
+            #if os(macOS) || os(iOS) || os(tvOS) || os(visionOS) || os(watchOS) || os(Android)
+            guard let result = mode.isWritable
+                ? funopen(cookie.toOpaque(), readStub, writeStub, seekStub, closeStub)
+                : funopen(cookie.toOpaque(), readStub, nil, seekStub, closeStub)
+            else { throw MemoryFileError.invalidMemoryFile }
+            #else
+            let stubs = cookie_io_functions_t(read: readStub, write: writeStub, seek: seekStub, close: closeStub)
+            guard let result = fopencookie(cookie.toOpaque(), mode.posixMode, stubs)
+            else { throw MemoryFileError.invalidMemoryFile }
+            #endif
+            return result
+        }
     }
+
+    /// Returns a `Data` object containing a representation of the receiver.
+    public var data: Data? { return self.memoryFile?.data }
 }
 
-private extension MemoryFile {
+public enum MemoryFileError: Error {
+    case invalidMemoryFile
+}
+
+private extension Archive.MemoryFile {
+
     func readData(buffer: UnsafeMutableRawBufferPointer) -> Int {
         let size = min(buffer.count, data.count-offset)
         let start = data.startIndex
-        data.copyBytes(to: buffer.bindMemory(to: UInt8.self), from: start+offset..<start+offset+size)
-        offset += size
+        self.data.copyBytes(to: buffer.bindMemory(to: UInt8.self), from: start+offset..<start+offset+size)
+        self.offset += size
         return size
     }
 
     func writeData(buffer: UnsafeRawBufferPointer) -> Int {
-        let start = data.startIndex
-        if offset < data.count && offset+buffer.count > data.count {
-            data.removeSubrange(start+offset..<start+data.count)
+        let start = self.data.startIndex
+        if self.offset < self.data.count && self.offset+buffer.count > self.data.count {
+            self.data.removeSubrange(start+self.offset..<start+self.data.count)
         } else if offset > data.count {
-            data.append(Data(count: offset-data.count))
+            self.data.append(Data(count: self.offset-self.data.count))
         }
-        if offset == data.count {
-            data.append(buffer.bindMemory(to: UInt8.self))
+        if self.offset == self.data.count {
+            self.data.append(buffer.bindMemory(to: UInt8.self))
         } else {
-            let start = data.startIndex // May have changed in earlier mutation
-            data.replaceSubrange(start+offset..<start+offset+buffer.count, with: buffer.bindMemory(to: UInt8.self))
+            let start = self.data.startIndex // May have changed in earlier mutation
+            self.data.replaceSubrange(
+                start+self.offset..<start+self.offset+buffer.count,
+                with: buffer.bindMemory(to: UInt8.self)
+            )
         }
-        offset += buffer.count
+        self.offset += buffer.count
         return buffer.count
     }
 
@@ -110,24 +95,25 @@ private extension MemoryFile {
     }
 }
 
-private func fileFromCookie(cookie: UnsafeRawPointer) -> MemoryFile {
-    return Unmanaged<MemoryFile>.fromOpaque(cookie).takeUnretainedValue()
+private func fileFromCookie(cookie: UnsafeRawPointer) -> Archive.MemoryFile {
+    return Unmanaged<Archive.MemoryFile>.fromOpaque(cookie).takeUnretainedValue()
 }
 
 private func closeStub(_ cookie: UnsafeMutableRawPointer?) -> Int32 {
     if let cookie = cookie {
-        Unmanaged<MemoryFile>.fromOpaque(cookie).release()
+        Unmanaged<Archive.MemoryFile>.fromOpaque(cookie).release()
     }
     return 0
 }
 
-#if os(macOS) || os(iOS) || os(watchOS) || os(tvOS)
+#if os(macOS) || os(iOS) || os(tvOS) || os(visionOS) || os(watchOS) || os(Android)
+
 private func readStub(_ cookie: UnsafeMutableRawPointer?,
                       _ bytePtr: UnsafeMutablePointer<Int8>?,
                       _ count: Int32) -> Int32 {
     guard let cookie = cookie, let bytePtr = bytePtr else { return 0 }
     return Int32(fileFromCookie(cookie: cookie).readData(
-        buffer: UnsafeMutableRawBufferPointer(start: bytePtr, count: Int(count))))
+                    buffer: UnsafeMutableRawBufferPointer(start: bytePtr, count: Int(count))))
 }
 
 private func writeStub(_ cookie: UnsafeMutableRawPointer?,
@@ -135,7 +121,7 @@ private func writeStub(_ cookie: UnsafeMutableRawPointer?,
                        _ count: Int32) -> Int32 {
     guard let cookie = cookie, let bytePtr = bytePtr else { return 0 }
     return Int32(fileFromCookie(cookie: cookie).writeData(
-        buffer: UnsafeRawBufferPointer(start: bytePtr, count: Int(count))))
+                    buffer: UnsafeRawBufferPointer(start: bytePtr, count: Int(count))))
 }
 
 private func seekStub(_ cookie: UnsafeMutableRawPointer?,
@@ -146,6 +132,18 @@ private func seekStub(_ cookie: UnsafeMutableRawPointer?,
 }
 
 #else
+
+extension Archive.AccessMode {
+
+    var posixMode: String {
+        switch self {
+        case .read: return "rb"
+        case .create: return "wb+"
+        case .update: return "rb+"
+        }
+    }
+}
+
 private func readStub(_ cookie: UnsafeMutableRawPointer?,
                       _ bytePtr: UnsafeMutablePointer<Int8>?,
                       _ count: Int) -> Int {

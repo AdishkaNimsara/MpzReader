@@ -1,6 +1,0 @@
-framework module R2Streamer {
-  umbrella header "R2Streamer-umbrella.h"
-
-  export *
-  module * { export * }
-}

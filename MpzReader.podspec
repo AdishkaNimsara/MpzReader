@@ -46,7 +46,6 @@ TODO: Add long description of the pod here.
   # s.frameworks = 'UIKit', 'MapKit'
    s.dependency 'SQLite.swift'
    s.dependency 'SwiftyJSON'
-   s.dependency 'ZIPFoundation'
 
    s.dependency 'CryptoSwift'
    s.dependency 'Fuzi'
@@ -58,4 +57,5 @@ TODO: Add long description of the pod here.
    s.dependency 'ReadiumStreamer', '~> 3.0.0'
    s.dependency 'ReadiumNavigator','~> 3.0.0'
    s.dependency 'ReadiumAdapterGCDWebServer', '~> 3.0.0'
+   s.dependency 'RNCryptor', '~> 5.0'
 end
